@@ -124,7 +124,7 @@ if filtros_aplicados:
     else:
         # Mostrar estrellas doradas para condición
         def estrellas_html(cond):
-            estrellas = len(cond.strip("*"))
+            estrellas = cond.count("*")
             return f"<span style='color:gold'>{'★'*estrellas}</span>"
 
         df_vista_visual = df_vista.copy()
