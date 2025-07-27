@@ -47,7 +47,7 @@ st.markdown("""
 # Imagen centrada con columnas
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.image("img/auto_interrogacion.png", width=400)
+    st.image("img/auto_interrogacion_2.jpg", width=700)
 
 # --- SIDEBAR ---
 st.sidebar.header("Filtros")
