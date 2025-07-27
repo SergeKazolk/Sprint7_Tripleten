@@ -1,29 +1,64 @@
-# Sprint7_Tripleten
-Proyecto sprint 7
-# Proyecto: Análisis de Anuncios de Vehículos
+#  El auto de tus sueños
 
-Esta aplicación web fue creada con Streamlit. Permite analizar un conjunto de datos de anuncios de coches usados en Estados Unidos de América
-### Funcionalidades EDA.ipynb
-- Mostrar histograma del odómetro
-- Mostrar gráfico de dispersión entre precio y odómetro
+**"El auto de tus sueños"** es una aplicación interactiva desarrollada con Streamlit que te permite explorar y seleccionar vehículos usados disponibles en un catálogo limpio y filtrable. Los usuarios pueden aplicar filtros personalizados, visualizar resultados en tiempo real, consultar la ficha técnica de cada vehículo, simular una compra y analizar el comportamiento de los precios mediante visualizaciones gráficas.
 
-### Funcionalidades app.py
-- Muestra los gráficos (histograma y gráfico de dispersión) interactivos y están construidos con Plotly.
+##  Requisitos
 
-### Funcionalidades datos_limpios.ipynb
--Carga el archivo vehicles_us.csv.
--Rellena valores faltantes de forma apropiada.
+Instala las dependencias necesarias con:
 
-Transforma:
+```bash
+pip install -r requirements.txt
+```
 
-    *is_4wd: convierte a 'Sí', '-', 'No'.
+##  Tecnologías utilizadas
 
-    *model: se divide en Marca y Modelo con capitalización.
+- **Python 3.8+**
+- [Streamlit](https://streamlit.io/)
+- pandas
+- matplotlib
+- seaborn
+- Pillow
 
-    *Columnas como Combustible, Condición, Color, Transmisión, Tipo, con nombres amigables en español.
+##  ¿Cómo ejecutar la app?
 
--Renombra todas las columnas a títulos comprensibles.
--Convierte Fecha de posteo a tipo datetime.
--Guarda el nuevo archivo limpio como vehicles_us_limpio.csv.
+```bash
+streamlit run nombre_del_script.py
+```
 
-### Funcionalidades "el_auto_de_tus_sueños.py"
+(Nota: reemplaza `nombre_del_script.py` con el nombre del archivo principal, por ejemplo, `el_auto_de_tus_sueños.py`)
+
+##  Funcionalidades principales
+
+- Filtros dinámicos por marca, modelo, año, tipo, condición, cilindrada, transmisión y precio.
+- Visualización inmediata de los resultados en tabla.
+- Selección de un vehículo y muestra de ficha técnica.
+- Confirmación de compra simulada.
+- Visualizaciones interactivas:
+  - Histograma de precios.
+  - Gráficos de dispersión seleccionables:
+    - Precio vs. Marca
+    - Precio vs. Año del modelo
+    - Precio vs. Kilometraje
+    - Precio vs. Cilindrada
+
+##  Recursos
+
+- Imágenes de apoyo ubicadas en la carpeta `/img`.
+
+##  Estructura sugerida del proyecto
+
+```
+auto-de-tus-suenos/
+│
+├── vehicles_us_limpio_2.csv         # Archivo de datos limpio
+├── el_auto_de_tus_suenos.py         # Archivo principal de Streamlit
+├── requirements.txt                 # Dependencias del proyecto
+├── README.md                        # Este archivo
+└── img/
+    ├── auto_interrogacion.png
+    └── auto_interrogacion_2.jpg
+```
+
+##  Licencia
+
+Proyecto educativo/descriptivo. Puedes adaptarlo y mejorarlo según tus necesidades.
