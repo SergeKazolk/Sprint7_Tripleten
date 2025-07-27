@@ -10,7 +10,7 @@ st.set_page_config(layout="wide")
 
 @st.cache_data
 def cargar_datos():
-    return pd.read_csv('vehicles_us_limpio.csv')
+    return pd.read_csv('vehicles_us_limpio_2.csv')
 
 
 df = cargar_datos()
