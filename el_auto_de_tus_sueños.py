@@ -108,25 +108,42 @@ max_resultados = st.sidebar.slider(
     "Máximo de resultados a mostrar", 5, 100, 50)
 df_vista = filtro_actual.head(max_resultados)
 
-filtros_aplicados = any([condicion, marca, modelo, año, tipo,
-                        cilindrada, transmision, rango_precio != (min_precio, max_precio)])
+# --- Mostrar resultados filtrados ---
+filtros_aplicados = any([
+    condicion, marca, modelo, año, tipo, cilindrada, transmision,
+    rango_precio != (min_precio, max_precio)
+])
 
 if filtros_aplicados:
     st.subheader("Resultados de la búsqueda")
+    st.caption(
+        f"Mostrando {len(df_vista)} de {len(filtro_actual)} resultados disponibles")
 
     if filtro_actual.empty:
         st.warning("No se encontraron resultados con los filtros seleccionados.")
     else:
+        # Mostrar estrellas doradas para condición
         def estrellas_html(cond):
             estrellas = len(cond.strip("*"))
-            return f"<span style='color:gold'>{'★'*estrellas}</span>" if estrellas else "-"
+            return f"<span style='color:gold'>{'★'*estrellas}</span>"
 
         df_vista_visual = df_vista.copy()
         df_vista_visual['Condición'] = df_vista_visual['Condición'].apply(
             estrellas_html)
 
-        opciones_autos = df_vista_visual.apply(
-            lambda row: f"{row['Marca']} {row['Modelo']} {row['Año del modelo']} - ${row['Precio']}", axis=1).tolist()
+        if len(df_vista_visual) <= 50:
+            st.markdown(
+                df_vista_visual.to_html(escape=False, index=False),
+                unsafe_allow_html=True
+            )
+        else:
+            st.dataframe(df_vista_visual)
+
+        # Agregar selección después de mostrar resultados
+        opciones_autos = df_vista.apply(
+            lambda row: f"{row['Marca']} {row['Modelo']} {row['Año del modelo']} - ${row['Precio']}", axis=1
+        ).tolist()
+
         seleccion = st.selectbox("Selecciona un auto para continuar:", [
                                  "-- Elige uno --"] + opciones_autos)
 
@@ -138,8 +155,8 @@ if filtros_aplicados:
 if st.session_state.mostrar_confirmacion and st.session_state.seleccion_auto:
     st.markdown("## Ficha técnica del auto seleccionado")
 
-    idx = df_vista_visual[
-        df_vista_visual.apply(
+    idx = df_vista[
+        df_vista.apply(
             lambda row: f"{row['Marca']} {row['Modelo']} {row['Año del modelo']} - ${row['Precio']}",
             axis=1
         ) == st.session_state.seleccion_auto
