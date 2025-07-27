@@ -52,7 +52,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.image("img/auto_interrogacion.png", width=700)
+    st.image("img/auto_interrogacion.png", width=600)
 
 # Filtros en sidebar
 st.sidebar.header("Filtros")
