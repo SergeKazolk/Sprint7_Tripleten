@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 from PIL import Image
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Configuración de página
 st.set_page_config(layout="wide")
@@ -34,6 +36,9 @@ if "mostrar_confirmacion" not in st.session_state:
 
 if "compra_confirmada" not in st.session_state:
     st.session_state.compra_confirmada = False
+
+if "tipo_grafica" not in st.session_state:
+    st.session_state.tipo_grafica = "Precio vs. Marca"
 
 # Botón para limpiar filtros
 if st.sidebar.button("🧹 Limpiar filtros"):
@@ -122,7 +127,6 @@ if filtros_aplicados:
     if filtro_actual.empty:
         st.warning("No se encontraron resultados con los filtros seleccionados.")
     else:
-        # Mostrar estrellas doradas para condición
         def estrellas_html(cond):
             estrellas = cond.count("*")
             return f"<span style='color:gold'>{'★'*estrellas}</span>"
@@ -139,13 +143,12 @@ if filtros_aplicados:
         else:
             st.dataframe(df_vista_visual)
 
-        # Agregar selección después de mostrar resultados
         opciones_autos = df_vista.apply(
             lambda row: f"{row['Marca']} {row['Modelo']} {row['Año del modelo']} - ${row['Precio']}", axis=1
         ).tolist()
 
         seleccion = st.selectbox("Selecciona un auto para continuar:", [
-                                 "-- Elige uno --"] + opciones_autos)
+            "-- Elige uno --"] + opciones_autos)
 
         if seleccion != "-- Elige uno --":
             st.session_state.seleccion_auto = seleccion
@@ -196,3 +199,47 @@ if st.session_state.mostrar_confirmacion and st.session_state.seleccion_auto:
 
 if st.session_state.compra_confirmada:
     st.success("🎉 ¡Felicidades! El auto de tus sueños es tuyo.")
+
+# Visualizaciones (al final)
+if filtros_aplicados and not filtro_actual.empty:
+    st.subheader("Visualizaciones")
+
+    fig1, ax1 = plt.subplots(figsize=(10, 4))
+    ax1.hist(filtro_actual['Precio'], bins=30,
+             color='skyblue', edgecolor='black')
+    ax1.set_title('Distribución de precios de autos')
+    ax1.set_xlabel('Precio')
+    ax1.set_ylabel('Cantidad de autos')
+    st.pyplot(fig1)
+
+    opcion_grafica = st.selectbox("Selecciona el tipo de gráfico de dispersión:",
+                                  ["Precio vs. Marca", "Precio vs. Año del modelo",
+                                      "Precio vs. Kilometraje", "Precio vs. Cilindrada"],
+                                  key="tipo_grafica")
+
+    fig2, ax2 = plt.subplots(figsize=(10, 5))
+    if opcion_grafica == "Precio vs. Marca":
+        sns.stripplot(data=filtro_actual, x='Marca', y='Precio',
+                      jitter=True, alpha=0.6, ax=ax2)
+        ax2.set_title('Precio de autos por Marca')
+        ax2.set_xlabel('Marca')
+    elif opcion_grafica == "Precio vs. Año del modelo":
+        sns.scatterplot(data=filtro_actual, x='Año del modelo',
+                        y='Precio', hue='Marca', alpha=0.7, ax=ax2)
+        ax2.set_title('Precio vs. Año del modelo')
+        ax2.set_xlabel('Año del modelo')
+    elif opcion_grafica == "Precio vs. Kilometraje":
+        sns.scatterplot(data=filtro_actual, x='Kilometraje',
+                        y='Precio', hue='Condición', alpha=0.6, ax=ax2)
+        ax2.set_title('Precio vs. Kilometraje')
+        ax2.set_xlabel('Kilometraje (km)')
+    elif opcion_grafica == "Precio vs. Cilindrada":
+        sns.scatterplot(data=filtro_actual, x='Cilindrada',
+                        y='Precio', hue='Marca', alpha=0.7, ax=ax2)
+        ax2.set_title('Precio vs. Cilindrada')
+        ax2.set_xlabel('Cilindrada')
+
+    ax2.set_ylabel('Precio')
+    if opcion_grafica == "Precio vs. Marca":
+        ax2.set_xticklabels(ax2.get_xticklabels(), rotation=45, ha='right')
+    st.pyplot(fig2)
